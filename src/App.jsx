@@ -8,14 +8,31 @@ function App() {
   const [travelAmount, setTravelAmount] = useState(0);
   const [shoppingAmount, setShoppingAmount] = useState(0);
 
-  const handleChange = (e, setter) => {
+  const handleChange = (e, setAmount) => {
     const value = parseInt(e.target.value) || 0;
-    setter(value);
+    setAmount(value);
   };
 
   useEffect(() => {
-    const totalExpenses = foodAmount + travelAmount + shoppingAmount;
-    setRemainingAmount(totalBudget - totalExpenses);
+    const totalSpent = foodAmount + travelAmount + shoppingAmount;
+    setRemainingAmount(totalBudget - totalSpent);
+    if (totalSpent > totalBudget) {
+      let excess = totalSpent - totalBudget;
+      console.log(excess, "excess");
+
+      const maxAmount = Math.max(foodAmount, travelAmount, shoppingAmount);
+      console.log(maxAmount, "maxAmount");
+      if (maxAmount === foodAmount) {
+        setFoodAmount(foodAmount - excess);
+      }
+      if (maxAmount === travelAmount) {
+        setTravelAmount(travelAmount - excess);
+      }
+      if (maxAmount === shoppingAmount) {
+        setShoppingAmount(shoppingAmount - excess);
+      }
+      setRemainingAmount(0);
+    }
   }, [foodAmount, travelAmount, shoppingAmount]);
   return (
     <>
